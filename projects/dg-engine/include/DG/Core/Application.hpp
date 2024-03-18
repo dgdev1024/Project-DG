@@ -57,6 +57,18 @@ namespace dg
   protected:
 
     /**
+     * @brief Performs application updates which rely on the application's fixed timestep.
+     */
+    void fixedUpdate ();
+
+    /**
+     * @brief Performs application updates which do not rely on a fixed timestep.
+     */
+    void update ();
+
+  protected:
+
+    /**
      * @brief A pointer to the singleton @a `Application` instance.
      */
     static Application* s_instance;
