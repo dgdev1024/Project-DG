@@ -299,6 +299,11 @@ namespace dg
 
   }
 
+  Bool FileLexer::isEmpty () const
+  {
+    return m_tokens.empty();
+  }
+
   Bool FileLexer::hasMoreTokens () const
   {
     return m_tokens.empty() == false && m_tokenPointer < m_tokens.size();

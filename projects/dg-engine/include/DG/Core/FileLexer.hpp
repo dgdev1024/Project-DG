@@ -32,9 +32,18 @@ namespace dg
      * @param filepath      The path to the text file to extract tokens from.
      *
      * @return  @a `true` if the file is loaded, and tokens extracted, successfully;
+     *          @a `true` if the file given has already been lexed;
      *          @a `false` otherwise.
      */
     Bool loadFromFile (const Path& filepath);  
+
+    /**
+     * @brief Indicates whether or not the @a `FileLexer`'s tokens collection contains any tokens.
+     * 
+     * @return  @a `true` if the tokens collection is empty;
+     *          @a `false` otherwise. 
+     */
+    Bool isEmpty () const;
 
     /**
      * @brief Indicates whether or not the @a `FileLexer`'s token pointer is pointing to a token or

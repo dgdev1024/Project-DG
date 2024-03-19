@@ -45,6 +45,8 @@ project "dg-engine"
 
   -- Include Directories
   includedirs {
+    "./vendor/glfw/include",
+    "./vendor/glew/include",
     "./vendor/glm/include",
     "./projects/dg-engine/include"
   }
@@ -79,6 +81,8 @@ project "dg-studio"
 
   -- Include Directories
   includedirs {
+    "./vendor/glfw/include",
+    "./vendor/glew/include",
     "./vendor/glm/include",
     "./projects/dg-engine/include",
     "./projects/dg-studio/include"
@@ -92,9 +96,16 @@ project "dg-studio"
 
   -- Link Libraries
   libdirs {
+    "./vendor/glew/lib",
+    "./vendor/glfw/lib",
     "./build/bin/dg-engine/%{cfg.buildcfg}"
   }
   links {
-    "dg-engine"
+    "dg-engine", "glfw3", "GL"
   }
+
+  -- Platform Specific Link Libraries
+  filter { "system:linux" }
+    links { "X11", "pthread", "Xrandr", "Xi", "dl" }
+  filter {}
   
