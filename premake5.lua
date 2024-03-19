@@ -45,6 +45,7 @@ project "dg-engine"
 
   -- Include Directories
   includedirs {
+    "./vendor/glm/include",
     "./projects/dg-engine/include"
   }
 
@@ -78,6 +79,7 @@ project "dg-studio"
 
   -- Include Directories
   includedirs {
+    "./vendor/glm/include",
     "./projects/dg-engine/include",
     "./projects/dg-studio/include"
   }

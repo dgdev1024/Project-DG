@@ -1,5 +1,6 @@
 /** @file DG/Core/Application.cpp */
 
+#include <DG/Events/EventBus.hpp>
 #include <DG/Core/Clock.hpp>
 #include <DG/Core/Application.hpp>
 
@@ -18,16 +19,20 @@ namespace dg
         throw std::runtime_error { "Client application instance already exists!" };
       }
 
+      EventBus::initialize(*this);            // Initialize the event bus.
+      m_layerStack = makeScope<LayerStack>(); // Initialize the layer stack.
+
       s_instance = this;
 
     } catch (std::exception& ex) {
-      std::cerr << "Exception constructing application: " << ex.what() << std::endl;
+      DG_ENGINE_CRIT("Exception creating application instance: {}!", ex.what());
       m_running = false;
     }
   }
 
   Application::~Application ()
   {
+    m_layerStack.reset();
     s_instance = nullptr;
   }
 
@@ -60,6 +65,9 @@ namespace dg
         Float32 elapsedTime = lagClock.restart();
         lagTime += elapsedTime;
 
+        // Poll the event bus and handle any events which have been emitted.
+        EventBus::poll();
+
         // Determine if enough lag time has elapsed to perform a fixed update.
         while (lagTime >= m_timestep) {
           fixedUpdate();
@@ -72,20 +80,58 @@ namespace dg
       }
 
     } catch (std::exception& ex) {
-      std::cerr << "Exception running application: " << ex.what() << std::endl;
+      DG_ENGINE_CRIT("Exception running application loop: {}!", ex.what());
       return 2;
     }
 
     return 0;
   }
 
+  void Application::attachLayer (Layer& layer)
+  {
+    m_layerStack->attachLayer(layer);
+  }
+
+  void Application::detachLayer (Layer& layer)
+  {
+    m_layerStack->detachLayer(layer);
+  }
+
+  void Application::processEvent (Event& ev)
+  {
+
+    // Iterate backwards over the layer stack and have each layer handle the event.
+    for (auto it = m_layerStack->rbegin(); it != m_layerStack->rend(); ++it) {
+
+      (*it)->processEvent(ev);
+
+    }
+
+    // Respond to a window close event by quitting the application.
+    handleEvent<WindowCloseEvent>(ev, [&] (WindowCloseEvent& ev) {
+      m_running = false;
+      return true;
+    });
+
+  }
+
   void Application::fixedUpdate ()
   {
+
+    // Iterate over the layer stack and run each layer's fixed update routine.
+    for (auto layer : *m_layerStack) {
+      layer->fixedUpdate(m_timestep);
+    }
 
   }
 
   void Application::update ()
   {
+
+    // Iterate over the layer stack and run each layer's update routine.
+    for (auto layer : *m_layerStack) {
+      layer->update();
+    }
 
   }
 

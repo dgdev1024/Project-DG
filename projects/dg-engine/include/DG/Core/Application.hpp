@@ -3,6 +3,8 @@
 #pragma once
 
 #include <DG_Pch.hpp>
+#include <DG/Core/LayerStack.hpp>
+#include <DG/Events/EventListener.hpp>
 
 namespace dg
 {
@@ -23,7 +25,7 @@ namespace dg
   /**
    * @brief The @a `Application` class is the base class for the engine's client application.
    */
-  class Application
+  class Application : public EventListener
   {
   protected:
 
@@ -31,6 +33,8 @@ namespace dg
      * @brief Constructs the @a `Application` with the given specification.
      * 
      * @param spec  The application's specification.
+     * 
+     * @throw   @a `std::runtime_error` if the application instance was already created.
      */
     Application (const ApplicationSpecification& spec);
 
@@ -54,7 +58,29 @@ namespace dg
      */
     Result start ();
 
+    /**
+     * @brief Attaches the given @a `Layer` to the application's @a `LayerStack`.
+     * 
+     * @param layer   A handle to the @a `Layer` to attach.
+     */
+    void attachLayer (Layer& layer);
+
+    /**
+     * @brief Detaches the given @a `Layer` from the application's @a `LayerStack`, if it is 
+     *        attached.
+     * 
+     * @param layer   A handle to the @a `Layer` to detach.
+     */
+    void detachLayer (Layer& layer);
+
   protected:
+
+    /**
+     * @brief Processes and handles events which need to be handled by the application.
+     * 
+     * @param ev  Refers to an @a `Event` instance which was emitted. 
+     */
+    void processEvent (Event& ev);
 
     /**
      * @brief Performs application updates which rely on the application's fixed timestep.
@@ -74,15 +100,20 @@ namespace dg
     static Application* s_instance;
 
     /**
+     * @brief Points to the client application's @a `LayerStack`.
+     */
+    Scope<LayerStack> m_layerStack = nullptr;
+
+    /**
      * @brief Indicates whether or not the application should continue running.
      */
-    Bool m_running;
+    Bool m_running = true;
 
     /**
      * @brief The application's fixed timestep, which controls how often the @a `fixedUpdate`
      *        method is run.
      */
-    Float32 m_timestep;
+    Float32 m_timestep = 1.0f / 60.0f;
 
   };
 

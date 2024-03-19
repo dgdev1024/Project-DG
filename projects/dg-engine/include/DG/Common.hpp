@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <memory>
+#include <string>
 #include <vector>
 #include <unordered_map>
 #include <algorithm>
@@ -29,16 +30,19 @@ namespace dg
 {
 
   // Typedefs
-  using Sint8       = std::int8_t;
-  using Sint16      = std::int16_t;
-  using Sint32      = std::int32_t;
-  using Sint64      = std::int64_t;
+  using Int8        = std::int8_t;
+  using Int16       = std::int16_t;
+  using Int32       = std::int32_t;
+  using Int64       = std::int64_t;
   using Uint8       = std::uint8_t;
   using Uint16      = std::uint16_t;
   using Uint32      = std::uint32_t;
   using Uint64      = std::uint64_t;
   using Float32     = float;
   using Float64     = double;
+  using Size        = std::size_t;
+  using Count       = std::size_t;
+  using Index       = std::size_t;
   using String      = std::string;
   using StringView  = std::string_view;
   using Path        = fs::path;
