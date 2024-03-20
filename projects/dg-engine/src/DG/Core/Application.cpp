@@ -19,8 +19,9 @@ namespace dg
         throw std::runtime_error { "Client application instance already exists!" };
       }
 
-      EventBus::initialize(*this);            // Initialize the event bus.
-      m_layerStack = makeScope<LayerStack>(); // Initialize the layer stack.
+      EventBus::initialize(*this);              // Initialize the event bus.
+      m_layerStack = makeScope<LayerStack>();   // Initialize the layer stack.
+      m_window = Window::make(spec.windowSpec); // Initialize the window.
 
       s_instance = this;
 
@@ -32,6 +33,7 @@ namespace dg
 
   Application::~Application ()
   {
+    m_window.reset();
     m_layerStack.reset();
     s_instance = nullptr;
   }
@@ -132,6 +134,9 @@ namespace dg
     for (auto layer : *m_layerStack) {
       layer->update();
     }
+
+    // Update the window.
+    m_window->update();
 
   }
 

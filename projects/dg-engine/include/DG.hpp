@@ -13,3 +13,8 @@
 // Events
 #include <DG/Events/EventEmitter.hpp>
 #include <DG/Events/EventBus.hpp>
+#include <DG/Events/EventListener.hpp>
+
+// Graphics
+#include <DG/Graphics/Color.hpp>
+#include <DG/Graphics/ColorPalette.hpp>

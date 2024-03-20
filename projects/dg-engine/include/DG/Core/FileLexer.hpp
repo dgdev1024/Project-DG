@@ -57,12 +57,14 @@ namespace dg
     /**
      * @brief Retrieves the next token in this @a `FileLexer`'s tokens collection.
      * 
+     * @param advance Advance the lexer to the next token after getting this token?
+     * 
      * @return  The next @a `FileToken`. 
      * 
      * @note  This method can also be used to skip the next token as well. Just don't use its return
      *        value.
      */
-    const FileToken& getNextToken () const;
+    const FileToken& getNextToken (Bool advance = true) const;
 
     /**
      * @brief Moves the @a `FileLexer`'s token pointer back to the start of the tokens collection.

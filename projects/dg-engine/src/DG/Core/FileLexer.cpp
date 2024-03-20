@@ -309,10 +309,11 @@ namespace dg
     return m_tokens.empty() == false && m_tokenPointer < m_tokens.size();
   }
 
-  const FileToken& FileLexer::getNextToken () const
+  const FileToken& FileLexer::getNextToken (Bool advance) const
   {
     if (m_tokenPointer >= m_tokens.size()) { return m_tokens.back(); }
-    else { return m_tokens.at(m_tokenPointer++); }
+    else if (advance == true) { return m_tokens.at(m_tokenPointer++); }
+    else { return m_tokens.at(m_tokenPointer); }
   }
 
   void FileLexer::rewind () const

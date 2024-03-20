@@ -4,6 +4,7 @@
 
 #include <DG_Pch.hpp>
 #include <DG/Core/LayerStack.hpp>
+#include <DG/Core/Window.hpp>
 #include <DG/Events/EventListener.hpp>
 
 namespace dg
@@ -20,6 +21,12 @@ namespace dg
      *        is to be run.
      */
     Float32 framerate = 60.0f;
+
+    /**
+     * @brief The application window's specification.
+     */
+    WindowSpecification windowSpec;
+
   };
 
   /**
@@ -103,6 +110,11 @@ namespace dg
      * @brief Points to the client application's @a `LayerStack`.
      */
     Scope<LayerStack> m_layerStack = nullptr;
+
+    /**
+     * @brief Points to the client application's @a `Window`.
+     */
+    Scope<Window> m_window = nullptr;
 
     /**
      * @brief Indicates whether or not the application should continue running.
