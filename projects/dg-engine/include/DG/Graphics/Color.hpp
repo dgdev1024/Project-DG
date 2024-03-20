@@ -24,6 +24,11 @@ namespace dg
     Float32 alpha = 1.0f;
 
     /**
+     * @brief Retrieves the components of this @a `Color` as a @a `Vector4` for shaders.
+     */
+    operator Vector4f () const;
+
+    /**
      * @brief Creates a new @a `Color` from the given integer color components.
      * 
      * @param red   The new color's red component.

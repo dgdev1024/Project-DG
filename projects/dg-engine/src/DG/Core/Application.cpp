@@ -2,6 +2,7 @@
 
 #include <DG/Events/EventBus.hpp>
 #include <DG/Core/Clock.hpp>
+#include <DG/Graphics/RenderInterface.hpp>
 #include <DG/Core/Application.hpp>
 
 namespace dg
@@ -17,13 +18,20 @@ namespace dg
 
       if (s_instance != nullptr) {
         throw std::runtime_error { "Client application instance already exists!" };
+      } else {
+        s_instance = this;
       }
 
-      EventBus::initialize(*this);              // Initialize the event bus.
-      m_layerStack = makeScope<LayerStack>();   // Initialize the layer stack.
-      m_window = Window::make(spec.windowSpec); // Initialize the window.
+      Logging::initialize();
+      EventBus::initialize(*this);                    // Initialize the event bus.
+      m_layerStack = makeScope<LayerStack>();         // Initialize the layer stack.
+      m_window = Window::make(spec.windowSpec);       // Initialize the window.
+      m_renderer = Renderer::make(spec.rendererSpec); // Initialize the renderer.
 
-      s_instance = this;
+      // Initialize GUI if desired.
+      if (spec.guiSpec.enabled == true) {
+        m_guiContext = GuiContext::make(spec.guiSpec);
+      }
 
     } catch (std::exception& ex) {
       DG_ENGINE_CRIT("Exception creating application instance: {}!", ex.what());
@@ -33,6 +41,8 @@ namespace dg
 
   Application::~Application ()
   {
+    m_guiContext.reset();
+    m_renderer.reset();
     m_window.reset();
     m_layerStack.reset();
     s_instance = nullptr;
@@ -45,6 +55,24 @@ namespace dg
     }
 
     return *s_instance;
+  }
+
+  Window& Application::getWindow ()
+  {
+    if (s_instance == nullptr) {
+      throw std::runtime_error { "Client application instance does not exist!" };
+    }
+
+    return *s_instance->m_window;
+  }
+
+  Renderer& Application::getRenderer ()
+  {
+    if (s_instance == nullptr) {
+      throw std::runtime_error { "Client application instance does not exist!" };
+    }
+
+    return *s_instance->m_renderer;
   }
 
   Result Application::start ()
@@ -130,9 +158,20 @@ namespace dg
   void Application::update ()
   {
 
+    // Clear the renderer.
+    m_renderer->clear();
+
     // Iterate over the layer stack and run each layer's update routine.
     for (auto layer : *m_layerStack) {
       layer->update();
+    }
+
+    if (m_guiContext != nullptr) {
+      m_guiContext->begin();
+      for (auto layer : *m_layerStack) {
+        layer->guiUpdate();
+      }
+      m_guiContext->end();
     }
 
     // Update the window.

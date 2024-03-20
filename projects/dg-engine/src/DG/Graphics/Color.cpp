@@ -11,6 +11,11 @@ namespace dg
   const Color Color::Green = Color::fromInteger(0x00FF00FF);
   const Color Color::Blue  = Color::fromInteger(0x0000FFFF);
 
+  Color::operator Vector4f () const
+  {
+    return { red, green, blue, alpha };
+  }
+
   Color Color::fromIntegers (Int32 red, Int32 green, Int32 blue, Int32 alpha)
   {
     return {

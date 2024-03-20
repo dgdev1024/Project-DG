@@ -37,3 +37,6 @@ generated/
 
 # VSCode Folder
 .vscode/
+
+# Dear ImGui Output
+imgui.ini

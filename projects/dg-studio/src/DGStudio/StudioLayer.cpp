@@ -43,7 +43,7 @@ namespace dgstudio
 
   void StudioLayer::guiUpdate ()
   {
-
+    ImGui::ShowDemoWindow();
   }
   
 }

@@ -48,6 +48,7 @@ project "dg-engine"
     "./vendor/glfw/include",
     "./vendor/glew/include",
     "./vendor/glm/include",
+    "./vendor/imgui",
     "./projects/dg-engine/include"
   }
 
@@ -61,7 +62,9 @@ project "dg-engine"
     "./projects/dg-engine/src/DG/Events/*.cpp",
     "./projects/dg-engine/src/DG/Graphics/*.cpp",
     "./projects/dg-engine/src/DG/Math/*.cpp",
-    "./projects/dg-engine/src/DG/Core/*.cpp"
+    "./projects/dg-engine/src/DG/Core/*.cpp",
+
+    "./vendor/imgui/*.cpp"
   }
   
 -- Studio Application
@@ -84,11 +87,12 @@ project "dg-studio"
     "./vendor/glfw/include",
     "./vendor/glew/include",
     "./vendor/glm/include",
+    "./vendor/imgui",
     "./projects/dg-engine/include",
     "./projects/dg-studio/include"
   }
 
-  -- Project srcs
+  -- Project Sources
   files {
     "./projects/dg-studio/include/**.hpp",
     "./projects/dg-studio/src/**.cpp"
@@ -106,6 +110,6 @@ project "dg-studio"
 
   -- Platform Specific Link Libraries
   filter { "system:linux" }
-    links { "X11", "pthread", "Xrandr", "Xi", "dl" }
+    links { "X11", "pthread", "Xrandr", "Xi", "dl", "GLEW" }
   filter {}
   

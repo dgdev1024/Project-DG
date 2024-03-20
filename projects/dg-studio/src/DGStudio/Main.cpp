@@ -4,6 +4,9 @@
 
 int main ()
 {
-  dgstudio::StudioApplication app; 
+  dg::ApplicationSpecification spec;
+  spec.guiSpec.enabled = true;
+
+  dgstudio::StudioApplication app { spec }; 
   return app.start();
 }

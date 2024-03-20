@@ -5,6 +5,8 @@
 #include <DG_Pch.hpp>
 #include <DG/Core/LayerStack.hpp>
 #include <DG/Core/Window.hpp>
+#include <DG/Core/GuiContext.hpp>
+#include <DG/Graphics/Renderer.hpp>
 #include <DG/Events/EventListener.hpp>
 
 namespace dg
@@ -26,6 +28,16 @@ namespace dg
      * @brief The application window's specification.
      */
     WindowSpecification windowSpec;
+
+    /**
+     * @brief The application's GUI context specification.
+     */
+    GuiContextSpecification guiSpec;
+
+    /**
+     * @brief The application renderer's specification.
+     */
+    RendererSpecification rendererSpec;
 
   };
 
@@ -56,6 +68,24 @@ namespace dg
      * @throw   @a `std::runtime_error` if the application instance was not yet created.
      */
     static Application& get ();
+
+    /**
+     * @brief Retrieves the singleton @a `Application` window.
+     * 
+     * @return  A handle to the singleton application window.
+     * 
+     * @throw   @a `std::runtime_error` if the application window was not yet created.
+     */
+    static Window& getWindow ();
+
+    /**
+     * @brief Retrieves the singleton @a `Application` renderer.
+     * 
+     * @return  A handle to the singleton application renderer.
+     * 
+     * @throw   @a `std::runtime_error` if the application renderer was not yet created.
+     */
+    static Renderer& getRenderer ();
 
     /**
      * @brief Starts the client application's loop.
@@ -115,6 +145,16 @@ namespace dg
      * @brief Points to the client application's @a `Window`.
      */
     Scope<Window> m_window = nullptr;
+
+    /**
+     * @brief Points to the client application's @a `GuiContext`.
+     */
+    Scope<GuiContext> m_guiContext = nullptr;
+
+    /**
+     * @brief Points to the client application's @a `Renderer`.
+     */
+    Scope<Renderer> m_renderer = nullptr;
 
     /**
      * @brief Indicates whether or not the application should continue running.
