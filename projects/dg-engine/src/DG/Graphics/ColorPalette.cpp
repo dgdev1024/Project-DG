@@ -43,6 +43,7 @@ namespace dg
         ));
 
         if (commandOver == true) { break; }
+        else { lexer.getNextToken(); }
 
       }
 
@@ -79,6 +80,7 @@ namespace dg
         ));
 
         if (commandOver == true) { break; }
+        else { lexer.getNextToken(); }
 
       }
 
@@ -87,8 +89,26 @@ namespace dg
 
     static Bool parsePaletteFile (ColorPalette& palette, FileLexer& lexer)
     {
+      FileToken token;
+
       while (lexer.hasMoreTokens() == true) {
-        const auto& token = lexer.getNextToken();
+        token = lexer.getNextToken();
+
+        if (token.type == FileTokenType::Semicolon) {
+          while (token.type != FileTokenType::NewLine && token.type != FileTokenType::EndOfFile) {
+            token = lexer.getNextToken();
+          }
+
+          continue;
+        }
+
+        if (token.type == FileTokenType::NewLine) {
+          continue;
+        }
+
+        if (token.type == FileTokenType::EndOfFile) {
+          break;
+        }
 
         if (token.type != FileTokenType::Identifier) {
           DG_ENGINE_ERROR("Unexpected '{}' token in line #{}.", token.typeToString(),
@@ -96,12 +116,16 @@ namespace dg
           return false;
         }
 
-        if (token.contents == "RGB" && parseCommandRGB(palette, lexer) == false) {
-          DG_ENGINE_ERROR("Error parsing 'RGB' command in line #{}.", token.sourceLine);
-          return false;
-        } else if (token.contents == "RGBA" && parseCommandRGBA(palette, lexer) == false) {
-          DG_ENGINE_ERROR("Error parsing 'RGBA' command in line #{}.", token.sourceLine);
-          return false;
+        if (token.contents == "RGB") {
+          if (parseCommandRGB(palette, lexer) == false) {
+            DG_ENGINE_ERROR("Error parsing 'RGB' command in line #{}.", token.sourceLine);
+            return false;
+          }
+        } else if (token.contents == "RGBA") {
+          if (parseCommandRGBA(palette, lexer) == false) {
+            DG_ENGINE_ERROR("Error parsing 'RGBA' command in line #{}.", token.sourceLine);
+            return false;
+          }
         } else {
           DG_ENGINE_ERROR("Unexpected '{}' token ('{}') in line #{}.", token.typeToString(),
             token.contents, token.sourceLine);

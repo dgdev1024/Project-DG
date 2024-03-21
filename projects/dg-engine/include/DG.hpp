@@ -6,6 +6,8 @@
 #include <DG/Core/Application.hpp>
 #include <DG/Core/Clock.hpp>
 #include <DG/Core/FileIo.hpp>
+#include <DG/Core/FileLexer.hpp>
+#include <DG/Core/Input.hpp>
 #include <DG/Core/LayerStack.hpp>
 #include <DG/Core/Logging.hpp>
 #include <DG/Core/String.hpp>

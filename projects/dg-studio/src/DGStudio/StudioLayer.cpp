@@ -18,7 +18,8 @@ namespace dgstudio
 
   void StudioLayer::onAttach ()
   {
-
+    dg::ColorPalette palette { "assets/background.pal" };
+    dg::Application::getRenderer().setClearColor(palette[1]);
   }
 
   void StudioLayer::onDetach ()

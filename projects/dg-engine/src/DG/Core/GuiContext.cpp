@@ -11,7 +11,9 @@
 namespace dg
 {
 
-  GuiContext::GuiContext (const GuiContextSpecification& spec)
+  GuiContext::GuiContext (const GuiContextSpecification& spec) :
+    m_docking { spec.docking },
+    m_viewport { spec.viewport }
   {
     // Set up the Dear ImGui context...
     IMGUI_CHECKVERSION();
