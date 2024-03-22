@@ -20,13 +20,22 @@ namespace dg
      * @brief Constructs a @a `ColorPalette` with no colors.
      */
     ColorPalette ();
-
+    
     /**
-     * @brief Constructs a @a `ColorPalette` with color data loaded from the given file.
-     * 
-     * @param filepath  The path to the palette file to load. 
+     * @brief Creates a new @a `ColorPalette` with no color data
+     *  
+     * @return  A shared pointer to the newly-created @a `ColorPalette`. 
      */
-    ColorPalette (const Path& filepath);
+    static Ref<ColorPalette> make ();
+    
+    /**
+     * @brief Creates a new @a `ColorPalette` with color data loaded from the given file.
+     * 
+     * @param filepath  The path to the color palette file to load.
+     *  
+     * @return  A shared pointer to the newly-created @a `ColorPalette`. 
+     */
+    static Ref<ColorPalette> make (const Path& filepath);
 
     /**
      * @brief Loads color palette data from a text file at the given path.
@@ -67,6 +76,16 @@ namespace dg
      *  
      * @return  The retrieved @a `Color`. 
      */
+    Color& get (const Index index);
+    const Color& get (const Index index) const;
+
+    /**
+     * @brief Retrieves a @a `Color` from this @a `ColorPalette` at the given index.
+     * 
+     * @param index The index of the color to retrieve.
+     *  
+     * @return  The retrieved @a `Color`. 
+     */
     Color& operator[] (const Index index);
     const Color& operator[] (const Index index) const;
 
@@ -87,6 +106,68 @@ namespace dg
      * @brief The collection of @a `Color` structures making up this @a `ColorPalette`.
      */
     Collection<Color> m_colors;
+
+  };
+
+  /**
+   * @brief The @a `ColorPaletteManager` class is a static helper class used for keeping track of
+   *        and easily accessing currently-loaded @a `ColorPalette` assets.
+   */
+  class ColorPaletteManager
+  {
+  public:
+    /**
+     * @brief Retrieves a loaded @a `ColorPalette` asset which is mapped to the given relative filename
+     *        string. If no such asset is found, then a new @a `ColorPalette` asset is created, loaded
+     *        from that file, then mapped to the given filename string.
+     * 
+     * @param filename  The relative filename of the asset to get or emplace.
+     * 
+     * @return  A shared pointer to the mapped (or newly-created) @a `ColorPalette` asset. 
+     */
+    static Ref<ColorPalette> getOrEmplace (const String& filename);
+
+    /**
+     * @brief Checks to see if a loaded @a `ColorPalette` asset has been mapped to the given relative
+     *        filename string.
+     * 
+     * @param filename  The relative filename of the asset to check for.
+     * 
+     * @return  @a `true` if a @a `ColorPalette` asset is mapped to the given filename string; @a `false`
+     *          otherwise. 
+     */
+    static Boolean contains (const String& filename);
+
+    /**
+     * @brief Retrieves a loaded @a `ColorPalette` asset which is mapped to the given relative filename
+     *        string.
+     * 
+     * @param filename  The relative filename of the asset to retrieve.
+     *  
+     * @return  A shared pointer to the mapped @a `ColorPalette` asset. 
+     */
+    static Ref<ColorPalette> get (const String& filename);
+
+    /**
+     * @brief Un-maps the loaded @a `ColorPalette` asset which is mapped to the given relative filename 
+     *        string.
+     * 
+     * @param filename  The relative filename of the asset to remove.
+     *  
+     * @return  A shared pointer to the removed @a `ColorPalette` asset. 
+     */
+    static Ref<ColorPalette> remove (const String& filename);
+
+    /**
+     * @brief Un-maps all loaded, currently-mapped @a `ColorPalette` assets.
+     */
+    static void clear ();
+    
+  private:
+    /**
+     * @brief The collection of currently loaded @a `ColorPalette` assets.
+     */
+    static Dictionary<Ref<ColorPalette>> s_assets;
 
   };
 

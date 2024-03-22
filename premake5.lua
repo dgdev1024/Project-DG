@@ -45,6 +45,7 @@ project "dg-engine"
 
   -- Include Directories
   includedirs {
+    "./vendor/stb/include",
     "./vendor/glfw/include",
     "./vendor/glew/include",
     "./vendor/glm/include",
@@ -84,6 +85,7 @@ project "dg-studio"
 
   -- Include Directories
   includedirs {
+    "./vendor/stb/include",
     "./vendor/glfw/include",
     "./vendor/glew/include",
     "./vendor/glm/include",

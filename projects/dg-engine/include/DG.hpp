@@ -20,3 +20,6 @@
 // Graphics
 #include <DG/Graphics/Color.hpp>
 #include <DG/Graphics/ColorPalette.hpp>
+#include <DG/Graphics/Shader.hpp>
+#include <DG/Graphics/Texture.hpp>
+#include <DG/Graphics/VertexArray.hpp>

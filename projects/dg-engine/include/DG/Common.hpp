@@ -48,6 +48,7 @@ namespace dg
   using Path        = fs::path;
   using Char        = char;
   using Bool        = bool;
+  using Boolean     = bool;
   using Result      = int;
 
   // Templated Typedefs

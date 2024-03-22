@@ -1,5 +1,6 @@
 /** @file DG/Graphics/ColorPalette.cpp */
 
+#include <DG/Core/FileIo.hpp>
 #include <DG/Core/FileLexer.hpp>
 #include <DG/Graphics/ColorPalette.hpp>
 
@@ -143,9 +144,16 @@ namespace dg
 
   }
 
-  ColorPalette::ColorPalette (const Path& filepath)
+  Ref<ColorPalette> ColorPalette::make ()
   {
-    loadFromFile(filepath);
+    return makeRef<ColorPalette>();
+  }
+
+  Ref<ColorPalette> ColorPalette::make (const Path& filepath)
+  {
+    auto palette = makeRef<ColorPalette>();
+    palette->loadFromFile(filepath);
+    return palette;
   }
 
   Bool ColorPalette::loadFromFile (const Path& filepath)
@@ -189,6 +197,26 @@ namespace dg
     return m_colors.size();
   }
 
+  Color& ColorPalette::get (const Index index)
+  {
+    if (index >= m_colors.size()) {
+      DG_ENGINE_CRIT("Color palette index #{} is out of range!", index);
+      throw std::out_of_range { "Color palette index is out of range!" };
+    }
+
+    return m_colors.at(index);
+  }
+
+  const Color& ColorPalette::get (const Index index) const
+  {
+    if (index >= m_colors.size()) {
+      DG_ENGINE_CRIT("Color palette index #{} is out of range!", index);
+      throw std::out_of_range { "Color palette index is out of range!" };
+    }
+
+    return m_colors.at(index);
+  }
+
   Color& ColorPalette::operator[] (const Index index)
   {
     if (index >= m_colors.size()) {
@@ -207,6 +235,82 @@ namespace dg
     }
 
     return m_colors.at(index);
+  }
+
+  Dictionary<Ref<ColorPalette>> ColorPaletteManager::s_assets;
+
+  Ref<ColorPalette> ColorPaletteManager::getOrEmplace (const String& filename)
+  {
+    // Ensure that the relative filename string is provided.
+    if (filename.empty()) {
+      throw std::invalid_argument { "Attempted 'getOrEmplace' with a blank filename string!" };
+    }
+
+    // Check to see if the palette asset is present. If so, then return it.
+    auto iter = s_assets.find(filename);
+    if (iter != s_assets.end()) { return iter->second; }
+
+    // Create the palette. Ensure that it is valid.
+    Ref<ColorPalette> palette = ColorPalette::make(FileIo::getAbsolute(filename));
+    if (palette->isEmpty() == false) {
+      DG_ENGINE_CRIT("Could not load palette asset file '{}'!", filename);
+      throw std::runtime_error { "Could not load palette asset file!" };
+    }
+
+    // Emplace, then return the palette.
+    s_assets.emplace(filename, palette);
+    return palette;
+  }
+
+  Boolean ColorPaletteManager::contains (const String& filename)
+  {
+    // Ensure that the relative filename string is provided.
+    if (filename.empty()) {
+      throw std::invalid_argument { "Attempted 'contains' with a blank filename string!" };
+    }
+
+    return s_assets.contains(filename);
+  }
+
+  Ref<ColorPalette> ColorPaletteManager::get (const String& filename)
+  {
+    if (filename.empty()) {
+      throw std::invalid_argument { "Attempted 'get' with blank string filename!" };
+    }
+
+    // Ensure the palette asset exists.
+    auto iter = s_assets.find(filename);
+    if (iter == s_assets.end()) {
+      DG_ENGINE_CRIT("ColorPalette asset '{}' not found!", filename);
+      throw std::out_of_range { "ColorPalette asset not found!" };
+    }
+
+    return iter->second;    
+  }
+
+  Ref<ColorPalette> ColorPaletteManager::remove (const String& filename)
+  {
+    if (filename.empty()) {
+      throw std::invalid_argument { "Attempted 'remove' with blank string filename!" };
+    }
+
+    // Ensure the palette asset exists.
+    auto iter = s_assets.find(filename);
+    if (iter == s_assets.end()) {
+      DG_ENGINE_CRIT("ColorPalette asset '{}' not found!", filename);
+      throw std::out_of_range { "ColorPalette asset not found!" };
+    }
+
+    // Get a copy of the palette before removing it.
+    auto removed = s_assets.at(filename);
+    s_assets.erase(iter);
+
+    return removed;    
+  }
+
+  void ColorPaletteManager::clear ()
+  {
+    s_assets.clear();
   }
 
 }

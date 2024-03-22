@@ -1,5 +1,9 @@
 /** @file DG/Core/Application.cpp */
 
+#include <DG/Graphics/ColorPalette.hpp>
+#include <DG/Graphics/Shader.hpp>
+#include <DG/Graphics/Texture.hpp>
+
 #include <DG/Events/EventBus.hpp>
 #include <DG/Core/Clock.hpp>
 #include <DG/Graphics/RenderInterface.hpp>
@@ -41,6 +45,10 @@ namespace dg
 
   Application::~Application ()
   {
+    ColorPaletteManager::clear();
+    TextureManager::clear();
+    ShaderManager::clear();
+
     m_guiContext.reset();
     m_renderer.reset();
     m_window.reset();
