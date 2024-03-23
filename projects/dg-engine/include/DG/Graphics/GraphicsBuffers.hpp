@@ -112,14 +112,17 @@ namespace dg
      * @tparam T  The standard-layout struct type of the vertex data to be allocated.
      *  
      * @param vertices  The collection of vertices to be uploaded. 
+     * @param count     The number of vertices to be uploaded.
      */
     template <typename T>
-    inline void allocate (const Collection<T>& vertices)
+    inline void allocate (const Collection<T>& vertices, Count count = -1)
     {
       static_assert(std::is_standard_layout_v<T>,
         "[VertexBuffer::allocate] 'T' must be of a standard layout.");
 
-      allocateRaw(vertices.data(), vertices.size() * sizeof(T));
+      if (count > vertices.size()) { count = vertices.size(); }
+
+      allocateRaw(vertices.data(), count * sizeof(T));
     }
 
     /**
@@ -129,14 +132,17 @@ namespace dg
      * @tparam T  The standard-layout struct type of the vertex data to be allocated.
      *  
      * @param vertices  The collection of vertices to be uploaded. 
+     * @param count     The number of vertices to be uploaded.
      */
     template <typename T>
-    inline void upload (const Collection<T>& vertices)
+    inline void upload (const Collection<T>& vertices, Count count = -1)
     {
       static_assert(std::is_standard_layout_v<T>,
         "[VertexBuffer::upload] 'T' must be of a standard layout.");
 
-      uploadRaw(vertices.data(), vertices.size() * sizeof(T));
+      if (count > vertices.size()) { count = vertices.size(); }
+
+      uploadRaw(vertices.data(), count * sizeof(T));
     }
 
   private:
@@ -240,6 +246,14 @@ namespace dg
      * @return  This @a `IndexBuffer`'s @a `IndexType`.
      */
     IndexType getIndexType () const;
+
+    /**
+     * @brief   Resolves the type of the unsigned integer indices in this @a `IndexBuffer` to the
+     *          proper GL enumeration.
+     * 
+     * @return  The resolved GL enumeration. 
+     */
+    GLenum resolveIndexType () const;
 
     /**
      * @brief Reserves the given number of indices of type @a `T` on this @a `IndexBuffer`

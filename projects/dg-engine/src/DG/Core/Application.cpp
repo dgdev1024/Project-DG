@@ -167,7 +167,7 @@ namespace dg
   {
 
     // Clear the renderer.
-    m_renderer->clear();
+    RenderInterface::clear();
 
     // Iterate over the layer stack and run each layer's update routine.
     for (auto layer : *m_layerStack) {

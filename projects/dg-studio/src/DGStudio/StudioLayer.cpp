@@ -5,6 +5,12 @@
 namespace dgstudio
 {
 
+  struct TestVertex
+  {
+    dg::Vector3f pos;
+    dg::Vector2f texcoord;
+  };
+
   StudioLayer::StudioLayer () :
     dg::Layer { "Studio Layer" }
   {
@@ -18,7 +24,7 @@ namespace dgstudio
 
   void StudioLayer::onAttach ()
   {
-    
+
   }
 
   void StudioLayer::onDetach ()
@@ -38,12 +44,11 @@ namespace dgstudio
 
   void StudioLayer::update ()
   {
-
   }
 
   void StudioLayer::guiUpdate ()
   {
-    ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+    // ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
     ImGui::ShowDemoWindow();
   }
   

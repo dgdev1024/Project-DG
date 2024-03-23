@@ -160,6 +160,16 @@ namespace dg
     return m_indexType;
   }
 
+  GLenum IndexBuffer::resolveIndexType () const
+  {
+    switch (m_indexType) {
+      case IndexType::UnsignedByte:   return GL_UNSIGNED_BYTE;
+      case IndexType::UnsignedShort:  return GL_UNSIGNED_SHORT;
+      case IndexType::UnsignedInt:    return GL_UNSIGNED_INT;
+      default:                        return GL_UNSIGNED_INT;
+    }
+  }
+
   void IndexBuffer::reserveRaw (const Size size)
   {
     // Data reservation can only be done with dynamic draw index buffers.

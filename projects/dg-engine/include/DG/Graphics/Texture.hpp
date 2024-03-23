@@ -79,6 +79,13 @@ namespace dg
     ~Texture ();
 
     /**
+     * @brief   Creates a new @a `Texture` with no image data.
+     *
+     * @return  A shared pointer to the newly-created @a `Texture`.
+     */
+    static Ref<Texture> make ();
+
+    /**
      * @brief Creates a new @a `Texture` from the given image file.
      * 
      * @param path  The path the texture file to load.

@@ -8,7 +8,7 @@ namespace dgstudio
   StudioApplication::StudioApplication (const dg::ApplicationSpecification& spec) :
     dg::Application { spec }
   {
-    m_renderer->setClearColor({ 0.2f, 0.3f, 0.3f });
+    dg::RenderInterface::setClearColor({ 0.2f, 0.3f, 0.3f });
 
     m_studioLayer = dg::makeScope<StudioLayer>();
     attachLayer(*m_studioLayer);

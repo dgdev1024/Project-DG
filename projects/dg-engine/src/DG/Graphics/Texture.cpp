@@ -58,6 +58,11 @@ namespace dg
     glDeleteTextures(1, &m_handle);
   }
 
+  Ref<Texture> Texture::make ()
+  {
+    return makeRef<Texture>();
+  }
+
   Ref<Texture> Texture::make (const Path& path)
   {
     auto texture = makeRef<Texture>();

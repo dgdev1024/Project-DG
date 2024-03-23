@@ -3,9 +3,14 @@
 #ifndef DG_PCH_HPP
 #define DG_PCH_HPP
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
+#include <entt/entt.hpp>
 #include <DG/Common.hpp>
 #include <DG/Core/Logging.hpp>
 
@@ -40,6 +45,9 @@ namespace dg
 
   using Matrix4f = glm::mat4;
   using Matrix4d = glm::dmat4;
+
+  using Quaternion4f = glm::quat;
+  using Quaternion4d = glm::dquat;
 
 }
 
